@@ -19,6 +19,10 @@ public class Network {
  * Add the user to the listOfUsers
  */
 	public void addNewUser(User u){
+		if(listOfUsers.size() == 0) {
+			listOfUsers.add(u);
+			return;
+		}
 		Random rand = new Random();
 		int  numberOfPeers = rand.nextInt(listOfUsers.size()) + 1;
 		ArrayList<Integer> peersIndex = new ArrayList<Integer>();
