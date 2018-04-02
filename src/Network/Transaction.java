@@ -18,4 +18,37 @@ public class Transaction {
 		counter ++;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public User getPayer() {
+		return payer;
+	}
+
+	public void setPayer(User payer) {
+		this.payer = payer;
+	}
+
+	public User getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}	
+
+
 }
