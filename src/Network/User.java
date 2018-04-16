@@ -98,6 +98,7 @@ public class User implements Serializable{
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(transaction);
+	    os.flush();
 	    return out.toByteArray();
 	}
 	
