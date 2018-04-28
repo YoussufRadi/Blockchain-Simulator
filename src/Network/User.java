@@ -6,17 +6,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-
 public class User implements Serializable{
 
-	ArrayList<User> listOfpeers;
-	ArrayList<Transaction> transactionCache;
-	PublicKey publicKey;
+	private ArrayList<User> listOfpeers;
+    private ArrayList<Transaction> transactionCache;
+    private PublicKey publicKey;
 	private PrivateKey privateKey;
-	String name;
-	BlockChain blockChain;
+    private String name;
+    private BlockChain blockChain;
 	
-	public User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
+	protected User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
 		super();
 		this.name = name;
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
@@ -31,7 +30,8 @@ public class User implements Serializable{
 		this.blockChain = new BlockChain();
 		
 	}
-	public void mineBlock() throws InvalidKeyException, Exception{
+
+	private void mineBlock() throws InvalidKeyException, Exception{
 		if(transactionCache.size()>=5){
 			ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 			for (int i = 0; i < 5; i++){
@@ -44,7 +44,8 @@ public class User implements Serializable{
 			
 		}
 	}
-	public int generateNonce(){
+
+	private int generateNonce(){
 		Random rand = new Random();
 		String nonce = "";
 		for (int i = 0; i < 10; i++) {
@@ -54,12 +55,12 @@ public class User implements Serializable{
 		return Integer.parseInt(nonce);
 	}
 
-	public Block addTransactionsToBlock(ArrayList<Transaction> transactions){
+	private Block addTransactionsToBlock(ArrayList<Transaction> transactions){
 		Block block = null;
 		boolean flag = true;
 		while(flag){
 			try {
-				block = new Block(blockChain.getHashOfLastBlock(), generateNonce(), transactions);
+				block = new Block(blockChain.getLastBlock(), generateNonce(), transactions);
 				flag = false;
 			} catch (UnsupportedEncodingException | NoSuchAlgorithmException
 					| WrongHashException e) {
@@ -72,7 +73,7 @@ public class User implements Serializable{
 		listOfpeers.add(user);
 	}
 	
-	public void announce(Announcement message) throws InvalidKeyException, Exception{
+	private void announce(Announcement message) throws Exception{
 		if(message instanceof Block)
 			if(blockChain.checkBlockInBlockChain((Block) message))
 				return;
@@ -115,13 +116,14 @@ public class User implements Serializable{
 	}
 	
 
-	public byte[] sign(Announcement message) throws InvalidKeyException, Exception{
+	private byte[] sign(Announcement message) throws InvalidKeyException, Exception{
 		Signature rsa = Signature.getInstance("DSA");
 		rsa.initSign(this.privateKey);
 		rsa.update(serialize(message));
 		return rsa.sign();
 	}
-	public static byte[] serialize(Announcement message) throws IOException {
+
+	private static byte[] serialize(Announcement message) throws IOException {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(message);
@@ -136,23 +138,8 @@ public class User implements Serializable{
 	public ArrayList<User> getListOfpeers() {
 		return listOfpeers;
 	}
-
-	public ArrayList<Transaction> getTransactionCache() {
-		return transactionCache;
-	}
-
-	public void setTransactionCache(ArrayList<Transaction> transactionCache) {
-		this.transactionCache = transactionCache;
-	}
-
-	public void setListOfpeers(ArrayList<User> listOfpeers) {
-		this.listOfpeers = listOfpeers;
-	}
 	public PublicKey getPublicKey() {
 		return publicKey;
-	}
-	public void setPublicKey(PublicKey publicKey) {
-		this.publicKey = publicKey;
 	}
 
 	@Override

@@ -9,10 +9,6 @@ import java.util.Arrays;
 public class Announcement implements Serializable{
 	byte[] signature;
 
-	public byte[] getSignature() {
-		return signature;
-	}
-
 	public void setSignature(byte[] signature) {
 		this.signature = signature;
 	}

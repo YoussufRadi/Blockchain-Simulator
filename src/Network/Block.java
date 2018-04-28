@@ -12,7 +12,7 @@ public class Block extends Announcement {
     private ArrayList<Transaction> transactions;
     private Block previousBlock;
 
-    public Block(String hash, Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+    protected Block(Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
         this.previousBlock = previousBlock;
         this.transactions = transactions;
         verifyHash(nonce);
@@ -36,10 +36,6 @@ public class Block extends Announcement {
 
     public ArrayList<Transaction> getTransactions() {
         return transactions;
-    }
-
-    public void setTransactions(ArrayList<Transaction> transactions) {
-        this.transactions = transactions;
     }
 
 

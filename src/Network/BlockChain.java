@@ -18,12 +18,6 @@ public class BlockChain {
 
     public void addBlockToChain(Block b){
 
-//        if(head == null){
-//            b.setPreviousBlock(head);
-//            head = b;
-//            return;
-//        }
-
         if(head.equals(b.getPreviousBlock())){
             b.setPreviousBlock(head);
             blocks.add(b);
@@ -39,50 +33,21 @@ public class BlockChain {
         b.setPreviousBlock(blocks.get(index));
         blocks.add(b);
         size.add(index+1);
-        if(size.get(size.size()-1) > current)
+        if(size.get(size.size()-1) > current){
             head = b;
+            current = size.get(size.size()-1);
+        }
 
 
     }
 
-//    public void addBlockToChain(Block b){
-//
-//        if(chain.isEmpty()){
-//            chain.add(b);
-//            return;
-//        }
-//
-//        Block lastBlock = chain.get(chain.size()-1);
-//        if(lastBlock.getHash().equals(b.getPrevHash())){
-//            chain.add(b);
-//            return;
-//        }
-//
-//        for(BlockChain bc : cache){
-//            if(bc.getHashOfLastBlock().equals(b.getPrevHash())){
-//                bc.addBlockToChain(b);
-//                Block temp = null;
-//                for(Block a : chain){
-//                    if(a.getHash().equals(bc.chain.get(0).getPrevHash())){
-//                        temp = a;
-//                        break;
-//                    }
-//                }
-//                break;
-//            }
-//        }
-//
-//
-//    }
 
     public boolean checkBlockInBlockChain(Block b){
-        if(blocks.contains(b))
-            return true;
-        return false;
+        return blocks.contains(b);
     }
 
 
-    public Block getHashOfLastBlock(){
+    public Block getLastBlock(){
         return head;
     }
 
