@@ -37,8 +37,10 @@ public class User implements Serializable{
 			for (int i = 0; i < 5; i++){
 				transactions.add(transactionCache.remove(0));
 			}
-			Block block = addTransactionsToBlock(transactions);
+			Announcement block = addTransactionsToBlock(transactions);
 			byte[] signature = sign(block);
+			block.setSignature(signature);
+			announce(block);
 			
 		}
 	}
@@ -70,7 +72,7 @@ public class User implements Serializable{
 		listOfpeers.add(user);
 	}
 	
-	public void announce(Announcement message){
+	public void announce(Announcement message) throws InvalidKeyException, Exception{
 		if(message instanceof Block)
 			if(blockChain.checkBlockInBlockChain((Block) message))
 				return;
@@ -79,8 +81,10 @@ public class User implements Serializable{
 		else
 			if(transactionCache.contains((Transaction) message) || blockChain.checkTransactionInChain((Transaction) message))
 				return;
-			else
+			else {
 				transactionCache.add((Transaction) message);
+				mineBlock();
+			}
 		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
@@ -102,25 +106,25 @@ public class User implements Serializable{
 		
 	}
 	public void createTransaction(int amount,User receiver) throws InvalidKeyException, Exception{
-		Announcement message = new Transaction(amount, this, receiver);
-		byte[] signature = sign(message);
-		message.setSignature(signature);
+		Announcement transaction = new Transaction(amount, this, receiver);
+		byte[] signature = sign(transaction);
+		transaction.setSignature(signature);
 		System.out.println(this.name + " creates announcement ");
-		announce(message);
+		announce(transaction);
 		
 	}
 	
 
-	public byte[] sign(Announcement transaction) throws InvalidKeyException, Exception{
+	public byte[] sign(Announcement message) throws InvalidKeyException, Exception{
 		Signature rsa = Signature.getInstance("DSA");
 		rsa.initSign(this.privateKey);
-		rsa.update(serialize(transaction));
+		rsa.update(serialize(message));
 		return rsa.sign();
 	}
-	public static byte[] serialize(Announcement transaction) throws IOException {
+	public static byte[] serialize(Announcement message) throws IOException {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    ObjectOutputStream os = new ObjectOutputStream(out);
-	    os.writeObject(transaction);
+	    os.writeObject(message);
 	    os.flush();
 	    return out.toByteArray();
 	}

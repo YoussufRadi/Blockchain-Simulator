@@ -12,10 +12,10 @@ public class Block extends Announcement {
     private String prevHash;
     private ArrayList<Transaction> transactions;
 
-    public Block(String hash, String prevHash, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+    public Block(String prevHash, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
         this.prevHash = prevHash;
         this.transactions = transactions;
-        verifyHash(nonce,hash);
+        verifyHash(nonce);
     }
 
     public String getHash() {
@@ -44,7 +44,7 @@ public class Block extends Announcement {
         return possibleHash;
     }
 
-    public void verifyHash(int nonce, String hash) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+    public void verifyHash(int nonce) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
         String verifiedHash = calcHash(nonce, prevHash, transactions);
         String target = "00";
         if (verifiedHash.equals(hash) && verifiedHash.substring(0,2).equals(target))

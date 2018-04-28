@@ -43,10 +43,10 @@ public class Main {
 		System.out.println("USER'S RECEIVED Announcements");
 		
 		System.out.println();
-		System.out.println("Yara's Announcements " + yara.getAnnouncements().toString());
-		System.out.println("Safa's Announcements " + safa.getAnnouncements().toString());
-		System.out.println("Narihan's Announcements " + narihan.getAnnouncements().toString());
-		System.out.println("Youssef's Announcements " + youssef.getAnnouncements().toString());
-		
+//		System.out.println("Yara's Announcements " + yara.getAnnouncements().toString());
+//		System.out.println("Safa's Announcements " + safa.getAnnouncements().toString());
+//		System.out.println("Narihan's Announcements " + narihan.getAnnouncements().toString());
+//		System.out.println("Youssef's Announcements " + youssef.getAnnouncements().toString());
+//		
 	}
 }
