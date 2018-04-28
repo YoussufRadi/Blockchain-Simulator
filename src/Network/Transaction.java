@@ -5,7 +5,7 @@ import java.io.Serializable;
 /*
  * This class stores the represents the transaction which is composed of the id, amount, payer and receiver
  */
-public class Transaction implements Serializable{
+public class Transaction extends Announcement implements Serializable{
 	int id; 
 	int amount;
 	User payer;
