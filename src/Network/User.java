@@ -66,9 +66,9 @@ public class User implements Serializable{
 		
 	}
 	public void createTransaction(int amount,User receiver) throws InvalidKeyException, Exception{
-		Transaction t = new Transaction(amount, this, receiver);
-		byte[] signature = sign(t);
-		Announcement message = new Announcement(t,signature);
+		Announcement message = new Transaction(amount, this, receiver);
+		byte[] signature = sign(message);
+		message.setSignature(signature);
 		System.out.println(this.name + " creates announcement ");
 		announce(message);
 		
@@ -82,13 +82,13 @@ public class User implements Serializable{
 		this.announcements = announcements;
 	}
 
-	public byte[] sign(Transaction transaction) throws InvalidKeyException, Exception{
+	public byte[] sign(Announcement transaction) throws InvalidKeyException, Exception{
 		Signature rsa = Signature.getInstance("DSA");
 		rsa.initSign(this.privateKey);
 		rsa.update(serialize(transaction));
 		return rsa.sign();
 	}
-	public static byte[] serialize(Transaction transaction) throws IOException {
+	public static byte[] serialize(Announcement transaction) throws IOException {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    ObjectOutputStream os = new ObjectOutputStream(out);
 	    os.writeObject(transaction);
