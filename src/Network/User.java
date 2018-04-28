@@ -9,12 +9,10 @@ import java.util.Random;
 public class User implements Serializable{
 
 	ArrayList<User> listOfpeers;
-	ArrayList<Announcement> announcements;
 	ArrayList<Transaction> transactionCache;
 	PublicKey publicKey;
 	private PrivateKey privateKey;
 	String name;
-	Block block;
 	BlockChain blockChain;
 	
 	public User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -28,7 +26,8 @@ public class User implements Serializable{
         this.publicKey = pair.getPublic();
 		this.privateKey = pair.getPrivate();
 		this.listOfpeers = new ArrayList<User>();
-		announcements = new ArrayList<Announcement>();
+		this.transactionCache = new ArrayList<Transaction>();
+		this.blockChain = new BlockChain();
 		
 	}
 	public void mineBlock(){
@@ -66,12 +65,14 @@ public class User implements Serializable{
 	}
 	
 	public void announce(Announcement message){
-		if(announcements.contains(message))
+		if(message instanceof Block)
+			blockChain.addBlockToChain((Block) message);
+		if(transactionCache.contains(message))
 			return;
 		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
-		announcements.add(message);
+		transactionCache.add((Transaction) message);
 		ArrayList<Integer> receiversIndex = new ArrayList<Integer>();
 		for(int i = 0; i<numberOfRecievers; i++){
 			int indexOfReceiver = rand.nextInt(listOfpeers.size());
@@ -120,13 +121,13 @@ public class User implements Serializable{
 	public ArrayList<User> getListOfpeers() {
 		return listOfpeers;
 	}
-	
-	public ArrayList<Announcement> getAnnouncements() {
-		return announcements;
+
+	public ArrayList<Transaction> getTransactionCache() {
+		return transactionCache;
 	}
 
-	public void setAnnouncements(ArrayList<Announcement> announcements) {
-		this.announcements = announcements;
+	public void setTransactionCache(ArrayList<Transaction> transactionCache) {
+		this.transactionCache = transactionCache;
 	}
 
 	public void setListOfpeers(ArrayList<User> listOfpeers) {
