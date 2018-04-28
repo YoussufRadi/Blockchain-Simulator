@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
+
 public class User implements Serializable{
 
 	ArrayList<User> listOfpeers;
@@ -31,36 +32,41 @@ public class User implements Serializable{
 		announcements = new ArrayList<Announcement>();
 		
 	}
-	public void mineBlock(){
+	public void mineBlock() throws InvalidKeyException, Exception{
 		if(transactionCache.size()>=5){
-			int transactionCacheSize = transactionCache.size();
-			for (int i = 0; i < transactionCacheSize; i++){
-			//	addTransactionToBlock(transactionCache.remove(0));
+			ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+			for (int i = 0; i < 5; i++){
+				transactions.add(transactionCache.remove(0));
 			}
+			Block block = addTransactionsToBlock(transactions);
+			byte[] signature = sign(block);
+			
 		}
 	}
-	
-//	public void addTransactionToBlock(Transaction transaction){
-//		ArrayList<Transaction> transactions = block.getTransactions();
-//		transactions.add(transaction);
-//		block.setTransactions(transactions);
-//	}
-	
-	
-	public void generateNonce(){
+	public int generateNonce(){
 		Random rand = new Random();
 		String nonce = "";
 		for (int i = 0; i < 10; i++) {
 			int digit = rand.nextInt(10);
 			nonce+=digit;
 		}
-		verifyHash(Integer.parseInt(nonce));
+		return Integer.parseInt(nonce);
 	}
-	
-	public void verifyHash(int nonce){
-		//String hash = block.calcHash(nonce, block.getPrevHash(), )
-		
+
+	public Block addTransactionsToBlock(ArrayList<Transaction> transactions){
+		Block block = null;
+		boolean flag = true;
+		while(flag){
+			try {
+				block = new Block(blockChain.getHashOfLastBlock(), generateNonce(), transactions);
+				flag = false;
+			} catch (UnsupportedEncodingException | NoSuchAlgorithmException
+					| WrongHashException e) {
+			}
+		}
+		return block;
 	}
+
 	public void addPeer(User user){
 		listOfpeers.add(user);
 	}
