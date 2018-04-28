@@ -10,12 +10,10 @@ import java.util.Random;
 public class User implements Serializable{
 
 	ArrayList<User> listOfpeers;
-	ArrayList<Announcement> announcements;
 	ArrayList<Transaction> transactionCache;
 	PublicKey publicKey;
 	private PrivateKey privateKey;
 	String name;
-	Block block;
 	BlockChain blockChain;
 	
 	public User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -29,7 +27,8 @@ public class User implements Serializable{
         this.publicKey = pair.getPublic();
 		this.privateKey = pair.getPrivate();
 		this.listOfpeers = new ArrayList<User>();
-		announcements = new ArrayList<Announcement>();
+		this.transactionCache = new ArrayList<Transaction>();
+		this.blockChain = new BlockChain();
 		
 	}
 	public void mineBlock() throws InvalidKeyException, Exception{
@@ -72,12 +71,19 @@ public class User implements Serializable{
 	}
 	
 	public void announce(Announcement message){
-		if(announcements.contains(message))
-			return;
+		if(message instanceof Block)
+			if(blockChain.checkBlockInBlockChain((Block) message))
+				return;
+			else
+				blockChain.addBlockToChain((Block) message);
+		else
+			if(transactionCache.contains((Transaction) message) || blockChain.checkTransactionInChain((Transaction) message))
+				return;
+			else
+				transactionCache.add((Transaction) message);
 		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
-		announcements.add(message);
 		ArrayList<Integer> receiversIndex = new ArrayList<Integer>();
 		for(int i = 0; i<numberOfRecievers; i++){
 			int indexOfReceiver = rand.nextInt(listOfpeers.size());
@@ -90,7 +96,6 @@ public class User implements Serializable{
 				System.out.println(this.name + " sends" + " to " + receiver.name);
 				receiver.announce(message);
 
-				
 			}
 		}
 		
@@ -123,16 +128,17 @@ public class User implements Serializable{
 	public String getName() {
 		return name;
 	}
+
 	public ArrayList<User> getListOfpeers() {
 		return listOfpeers;
 	}
-	
-	public ArrayList<Announcement> getAnnouncements() {
-		return announcements;
+
+	public ArrayList<Transaction> getTransactionCache() {
+		return transactionCache;
 	}
 
-	public void setAnnouncements(ArrayList<Announcement> announcements) {
-		this.announcements = announcements;
+	public void setTransactionCache(ArrayList<Transaction> transactionCache) {
+		this.transactionCache = transactionCache;
 	}
 
 	public void setListOfpeers(ArrayList<User> listOfpeers) {

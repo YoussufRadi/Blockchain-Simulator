@@ -6,11 +6,11 @@ import java.io.Serializable;
  * This class stores the represents the transaction which is composed of the id, amount, payer and receiver
  */
 public class Transaction extends Announcement implements Serializable{
-	int id; 
-	int amount;
-	User payer;
-	User receiver;
-	static int counter = 0; 
+	private int id;
+	private int amount;
+	private User payer;
+	private User receiver;
+	private static int counter = 0;
 	
 	public Transaction(int a, User p, User r) {
 		this.id = counter;
@@ -24,32 +24,16 @@ public class Transaction extends Announcement implements Serializable{
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public int getAmount() {
 		return amount;
-	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
 	}
 
 	public User getPayer() {
 		return payer;
 	}
 
-	public void setPayer(User payer) {
-		this.payer = payer;
-	}
-
 	public User getReceiver() {
 		return receiver;
-	}
-
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
 	}
 
 	@Override
