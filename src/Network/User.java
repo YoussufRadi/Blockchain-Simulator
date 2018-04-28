@@ -66,13 +66,18 @@ public class User implements Serializable{
 	
 	public void announce(Announcement message){
 		if(message instanceof Block)
-			blockChain.addBlockToChain((Block) message);
-		if(transactionCache.contains(message))
-			return;
+			if(blockChain.checkBlockInBlockChain((Block) message))
+				return;
+			else
+				blockChain.addBlockToChain((Block) message);
+		else
+			if(transactionCache.contains((Transaction) message) || blockChain.checkTransactionInChain((Transaction) message))
+				return;
+			else
+				transactionCache.add((Transaction) message);
 		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
-		transactionCache.add((Transaction) message);
 		ArrayList<Integer> receiversIndex = new ArrayList<Integer>();
 		for(int i = 0; i<numberOfRecievers; i++){
 			int indexOfReceiver = rand.nextInt(listOfpeers.size());
@@ -85,7 +90,6 @@ public class User implements Serializable{
 				System.out.println(this.name + " sends" + " to " + receiver.name);
 				receiver.announce(message);
 
-				
 			}
 		}
 		
@@ -118,6 +122,7 @@ public class User implements Serializable{
 	public String getName() {
 		return name;
 	}
+
 	public ArrayList<User> getListOfpeers() {
 		return listOfpeers;
 	}
