@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class Block extends Announcement {
     private String hash;
-    private String prevHash;
     private ArrayList<Transaction> transactions;
+    private Block previousBlock;
 
-    public Block(String hash, String prevHash, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
-        this.prevHash = prevHash;
+    public Block(String hash, Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+        this.previousBlock = previousBlock;
         this.transactions = transactions;
         verifyHash(nonce,hash);
     }
@@ -23,7 +23,15 @@ public class Block extends Announcement {
     }
 
     public String getPrevHash() {
-        return prevHash;
+        return previousBlock.hash;
+    }
+
+    public Block getPreviousBlock() {
+        return previousBlock;
+    }
+
+    public void setPreviousBlock(Block previousBlock) {
+        this.previousBlock = previousBlock;
     }
 
     public ArrayList<Transaction> getTransactions() {
@@ -45,7 +53,7 @@ public class Block extends Announcement {
     }
 
     public void verifyHash(int nonce, String hash) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
-        String verifiedHash = calcHash(nonce, prevHash, transactions);
+        String verifiedHash = calcHash(nonce, previousBlock.hash, transactions);
         String target = "00";
         if (verifiedHash.equals(hash) && verifiedHash.substring(0,2).equals(target))
             this.hash = hash;
@@ -57,7 +65,7 @@ public class Block extends Announcement {
     public String toString() {
         return "Block{" +
                 "hash='" + hash + '\'' +
-                ", prevHash='" + prevHash + '\'' +
+                ", prevHash='" + previousBlock.hash + '\'' +
                 ", transactions=" + transactions +
                 '}';
     }
