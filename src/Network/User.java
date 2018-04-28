@@ -4,18 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.security.Signature;
-
-import javax.crypto.KeyGenerator;
 
 
 public class User implements Serializable{
@@ -30,8 +21,11 @@ public class User implements Serializable{
 		super();
 		this.name = name;
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-		KeyPair pair = keyGen.generateKeyPair();
-		this.publicKey = pair.getPublic();
+		SecureRandom random = SecureRandom.getInstance("SHA1PRNG",
+				"SUN");
+        keyGen.initialize(1024, random);
+        KeyPair pair = keyGen.generateKeyPair();
+        this.publicKey = pair.getPublic();
 		this.privateKey = pair.getPrivate();
 		this.listOfpeers = new ArrayList<User>();
 		announcements = new ArrayList<Announcement>();
@@ -89,7 +83,7 @@ public class User implements Serializable{
 	}
 
 	public byte[] sign(Transaction transaction) throws InvalidKeyException, Exception{
-		Signature rsa = Signature.getInstance("DSA"); 
+		Signature rsa = Signature.getInstance("DSA");
 		rsa.initSign(this.privateKey);
 		rsa.update(serialize(transaction));
 		return rsa.sign();

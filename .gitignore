@@ -25,6 +25,8 @@ hs_err_pid*
 .metadata
 bin/
 tmp/
+.classpath
+.project
 *.tmp
 *.bak
 *.swp
@@ -33,6 +35,11 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+# IntelliJ 
+.idea/
+*.iml
+*.iws
 
 # External tool builders
 .externalToolBuilders/
