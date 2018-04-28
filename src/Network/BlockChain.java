@@ -30,5 +30,13 @@ public class BlockChain {
         return chain.get(chain.size()-1).getHash();
     }
 
+    public boolean checkTransactionInChain(Transaction t){
+        for(Block b : chain){
+            if(b.getTransactions().contains(t))
+                return true;
+        }
+        return false;
+    }
+
 
 }
