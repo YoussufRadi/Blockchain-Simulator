@@ -25,6 +25,12 @@ public class BlockChain {
 
     }
 
+    public boolean checkBlockInBlockChain(Block b){
+        if(chain.contains(b))
+            return true;
+        return false;
+    }
+
 
     public String getHashOfLastBlock(){
         return chain.get(chain.size()-1).getHash();
