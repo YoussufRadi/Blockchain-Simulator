@@ -15,7 +15,7 @@ public class Block extends Announcement {
     public Block(String hash, Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
         this.previousBlock = previousBlock;
         this.transactions = transactions;
-        verifyHash(nonce,hash);
+        verifyHash(nonce);
     }
 
     public String getHash() {
@@ -52,8 +52,8 @@ public class Block extends Announcement {
         return possibleHash;
     }
 
-    public void verifyHash(int nonce, String hash) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
-        String verifiedHash = calcHash(nonce, previousBlock.hash, transactions);
+    public void verifyHash(int nonce) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+        String verifiedHash = calcHash(nonce, previousBlock.getPrevHash(), transactions);
         String target = "00";
         if (verifiedHash.equals(hash) && verifiedHash.substring(0,2).equals(target))
             this.hash = hash;

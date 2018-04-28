@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
+
 public class User implements Serializable{
 
 	ArrayList<User> listOfpeers;
-	ArrayList<Announcement> announcements;
 	ArrayList<Transaction> transactionCache;
 	PublicKey publicKey;
 	private PrivateKey privateKey;
 	String name;
-	Block block;
 	BlockChain blockChain;
 	
 	public User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -28,50 +27,67 @@ public class User implements Serializable{
         this.publicKey = pair.getPublic();
 		this.privateKey = pair.getPrivate();
 		this.listOfpeers = new ArrayList<User>();
-		announcements = new ArrayList<Announcement>();
+		this.transactionCache = new ArrayList<Transaction>();
+		this.blockChain = new BlockChain();
 		
 	}
-	public void mineBlock(){
+	public void mineBlock() throws InvalidKeyException, Exception{
 		if(transactionCache.size()>=5){
-			int transactionCacheSize = transactionCache.size();
-			for (int i = 0; i < transactionCacheSize; i++){
-			//	addTransactionToBlock(transactionCache.remove(0));
+			ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+			for (int i = 0; i < 5; i++){
+				transactions.add(transactionCache.remove(0));
 			}
+			Announcement block = addTransactionsToBlock(transactions);
+			byte[] signature = sign(block);
+			block.setSignature(signature);
+			announce(block);
+			
 		}
 	}
-	
-//	public void addTransactionToBlock(Transaction transaction){
-//		ArrayList<Transaction> transactions = block.getTransactions();
-//		transactions.add(transaction);
-//		block.setTransactions(transactions);
-//	}
-	
-	
-	public void generateNonce(){
+	public int generateNonce(){
 		Random rand = new Random();
 		String nonce = "";
 		for (int i = 0; i < 10; i++) {
 			int digit = rand.nextInt(10);
 			nonce+=digit;
 		}
-		verifyHash(Integer.parseInt(nonce));
+		return Integer.parseInt(nonce);
 	}
-	
-	public void verifyHash(int nonce){
-		//String hash = block.calcHash(nonce, block.getPrevHash(), )
-		
+
+	public Block addTransactionsToBlock(ArrayList<Transaction> transactions){
+		Block block = null;
+		boolean flag = true;
+		while(flag){
+			try {
+				block = new Block(blockChain.getHashOfLastBlock(), generateNonce(), transactions);
+				flag = false;
+			} catch (UnsupportedEncodingException | NoSuchAlgorithmException
+					| WrongHashException e) {
+			}
+		}
+		return block;
 	}
+
 	public void addPeer(User user){
 		listOfpeers.add(user);
 	}
 	
-	public void announce(Announcement message){
-		if(announcements.contains(message))
-			return;
+	public void announce(Announcement message) throws InvalidKeyException, Exception{
+		if(message instanceof Block)
+			if(blockChain.checkBlockInBlockChain((Block) message))
+				return;
+			else
+				blockChain.addBlockToChain((Block) message);
+		else
+			if(transactionCache.contains((Transaction) message) || blockChain.checkTransactionInChain((Transaction) message))
+				return;
+			else {
+				transactionCache.add((Transaction) message);
+				mineBlock();
+			}
 		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
-		announcements.add(message);
 		ArrayList<Integer> receiversIndex = new ArrayList<Integer>();
 		for(int i = 0; i<numberOfRecievers; i++){
 			int indexOfReceiver = rand.nextInt(listOfpeers.size());
@@ -84,32 +100,31 @@ public class User implements Serializable{
 				System.out.println(this.name + " sends" + " to " + receiver.name);
 				receiver.announce(message);
 
-				
 			}
 		}
 		
 		
 	}
 	public void createTransaction(int amount,User receiver) throws InvalidKeyException, Exception{
-		Announcement message = new Transaction(amount, this, receiver);
-		byte[] signature = sign(message);
-		message.setSignature(signature);
+		Announcement transaction = new Transaction(amount, this, receiver);
+		byte[] signature = sign(transaction);
+		transaction.setSignature(signature);
 		System.out.println(this.name + " creates announcement ");
-		announce(message);
+		announce(transaction);
 		
 	}
 	
 
-	public byte[] sign(Announcement transaction) throws InvalidKeyException, Exception{
+	public byte[] sign(Announcement message) throws InvalidKeyException, Exception{
 		Signature rsa = Signature.getInstance("DSA");
 		rsa.initSign(this.privateKey);
-		rsa.update(serialize(transaction));
+		rsa.update(serialize(message));
 		return rsa.sign();
 	}
-	public static byte[] serialize(Announcement transaction) throws IOException {
+	public static byte[] serialize(Announcement message) throws IOException {
 	    ByteArrayOutputStream out = new ByteArrayOutputStream();
 	    ObjectOutputStream os = new ObjectOutputStream(out);
-	    os.writeObject(transaction);
+	    os.writeObject(message);
 	    os.flush();
 	    return out.toByteArray();
 	}
@@ -117,16 +132,17 @@ public class User implements Serializable{
 	public String getName() {
 		return name;
 	}
+
 	public ArrayList<User> getListOfpeers() {
 		return listOfpeers;
 	}
-	
-	public ArrayList<Announcement> getAnnouncements() {
-		return announcements;
+
+	public ArrayList<Transaction> getTransactionCache() {
+		return transactionCache;
 	}
 
-	public void setAnnouncements(ArrayList<Announcement> announcements) {
-		this.announcements = announcements;
+	public void setTransactionCache(ArrayList<Transaction> transactionCache) {
+		this.transactionCache = transactionCache;
 	}
 
 	public void setListOfpeers(ArrayList<User> listOfpeers) {
