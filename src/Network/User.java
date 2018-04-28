@@ -36,15 +36,18 @@ public class User implements Serializable{
 	}
 	public void mineBlock(){
 		if(transactionCache.size()>=5){
-			
+			int transactionCacheSize = transactionCache.size();
+			for (int i = 0; i < transactionCacheSize; i++){
+			//	addTransactionToBlock(transactionCache.remove(0));
+			}
 		}
 	}
 	
-	public void addTransactionToBlock(Transaction transaction){
-		ArrayList<Transaction> transactions = block.getTransactions();
-		transactions.add(transaction);
-		block.setTransactions(transactions);
-	}
+//	public void addTransactionToBlock(Transaction transaction){
+//		ArrayList<Transaction> transactions = block.getTransactions();
+//		transactions.add(transaction);
+//		block.setTransactions(transactions);
+//	}
 	
 	
 	public void generateNonce(){
@@ -142,11 +145,6 @@ public class User implements Serializable{
 	@Override
 	public String toString() {
 		return "User [name=" + name + "]";
-	}
-	public static void main(String[] args) {
-		String x = "safa";
-		System.out.println(x.substring(0, 2));
-	}
-	
+	}	
 	
 }
