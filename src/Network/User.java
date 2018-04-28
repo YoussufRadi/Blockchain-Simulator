@@ -13,9 +13,12 @@ public class User implements Serializable{
 
 	ArrayList<User> listOfpeers;
 	ArrayList<Announcement> announcements;
+	ArrayList<Transaction> transactionCache;
 	PublicKey publicKey;
 	private PrivateKey privateKey;
 	String name;
+	Block block;
+	BlockChain blockChain;
 	
 	public User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
 		super();
@@ -31,11 +34,33 @@ public class User implements Serializable{
 		announcements = new ArrayList<Announcement>();
 		
 	}
-	
-	public String getName() {
-		return name;
+	public void mineBlock(){
+		if(transactionCache.size()>=5){
+			
+		}
 	}
-
+	
+	public void addTransactionToBlock(Transaction transaction){
+		ArrayList<Transaction> transactions = block.getTransactions();
+		transactions.add(transaction);
+		block.setTransactions(transactions);
+	}
+	
+	
+	public void generateNonce(){
+		Random rand = new Random();
+		String nonce = "";
+		for (int i = 0; i < 10; i++) {
+			int digit = rand.nextInt(10);
+			nonce+=digit;
+		}
+		verifyHash(Integer.parseInt(nonce));
+	}
+	
+	public void verifyHash(int nonce){
+		//String hash = block.calcHash(nonce, block.getPrevHash(), )
+		
+	}
 	public void addPeer(User user){
 		listOfpeers.add(user);
 	}
@@ -74,13 +99,6 @@ public class User implements Serializable{
 		
 	}
 	
-	public ArrayList<Announcement> getAnnouncements() {
-		return announcements;
-	}
-
-	public void setAnnouncements(ArrayList<Announcement> announcements) {
-		this.announcements = announcements;
-	}
 
 	public byte[] sign(Transaction transaction) throws InvalidKeyException, Exception{
 		Signature rsa = Signature.getInstance("DSA");
@@ -96,11 +114,21 @@ public class User implements Serializable{
 	    return out.toByteArray();
 	}
 	
+	public String getName() {
+		return name;
+	}
 	public ArrayList<User> getListOfpeers() {
 		return listOfpeers;
 	}
 	
-	
+	public ArrayList<Announcement> getAnnouncements() {
+		return announcements;
+	}
+
+	public void setAnnouncements(ArrayList<Announcement> announcements) {
+		this.announcements = announcements;
+	}
+
 	public void setListOfpeers(ArrayList<User> listOfpeers) {
 		this.listOfpeers = listOfpeers;
 	}
@@ -114,6 +142,10 @@ public class User implements Serializable{
 	@Override
 	public String toString() {
 		return "User [name=" + name + "]";
+	}
+	public static void main(String[] args) {
+		String x = "safa";
+		System.out.println(x.substring(0, 2));
 	}
 	
 	
