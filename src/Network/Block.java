@@ -62,13 +62,4 @@ public class Block extends Announcement {
                 '}';
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchProviderException {
-        ArrayList<Transaction> t = new ArrayList<>();
-        User a = new User("y");
-        User b = new User("i");
-        t.add(new Transaction(400, a, b));
-        System.out.println("ooo");
-        System.out.println(calcHash(2, "4", t));
-    }
-
 }
