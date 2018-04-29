@@ -1,7 +1,7 @@
 package Network;
 
-public class WrongHashException extends Exception{
-    public WrongHashException(String message) {
+class WrongHashException extends Exception{
+    WrongHashException(String message) {
         super(message);
     }
 }

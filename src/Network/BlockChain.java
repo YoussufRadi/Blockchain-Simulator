@@ -10,7 +10,7 @@ public class BlockChain implements Serializable {
     private ArrayList<Integer> size;
     private int current;
 
-    public BlockChain() {
+    BlockChain() {
         this.head = null;
         blocks = new ArrayList<>();
         size = new ArrayList<>();
@@ -23,27 +23,9 @@ public class BlockChain implements Serializable {
 
         System.out.println("BLOOOCKK    " + b);
 
-//        if(head.equals(b.getPreviousBlock())){
-//            b.setPreviousBlock(head);
-//            blocks.add(b);
-//            if(size.isEmpty())
-//                size.add(1);
-//            else size.get(blocks.indexOf(head)+1);
-//            current = size.get(size.size()-1);
-//            head = b;
-//            return;
-//        }
-
-
         blocks.add(b);
         size.add(1);
         updatePointers();
-//        if(size.get(size.size()-1) > current){
-//            head = b;
-//            current = size.get(size.size()-1);
-//        }
-
-
     }
 
     private void updatePointers(){

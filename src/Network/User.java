@@ -15,7 +15,7 @@ public class User implements Serializable{
     private String name;
     private BlockChain blockChain;
 	
-	protected User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
+    User(String name) throws NoSuchAlgorithmException, NoSuchProviderException {
 		super();
 		this.name = name;
 		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");

@@ -9,7 +9,7 @@ import java.util.Random;
 public class Network {
 	ArrayList<User> listOfUsers;
 	
-	public Network() {
+	Network() {
 		listOfUsers = new ArrayList<User>();
 	}
 /*

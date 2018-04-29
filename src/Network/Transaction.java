@@ -12,7 +12,7 @@ public class Transaction extends Announcement implements Serializable{
 	private User receiver;
 	private static int counter = 0;
 	
-	public Transaction(int a, User p, User r) {
+	Transaction(int a, User p, User r) {
 		this.id = counter;
 		this.amount = a;
 		this.payer = p; 

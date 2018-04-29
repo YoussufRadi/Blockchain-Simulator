@@ -12,17 +12,17 @@ public class Block extends Announcement implements Serializable {
     private ArrayList<Transaction> transactions;
     private Block previousBlock;
 
-    protected Block(Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+    Block(Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
         this.previousBlock = previousBlock;
         this.transactions = transactions;
         verifyHash(nonce);
     }
 
-    public String getHash() {
+    private String getHash() {
         return hash;
     }
 
-    public String getPrevHash() {
+    private String getPrevHash() {
         if(previousBlock == null)
             return "0000000000000000000000000000000000000000";
         return previousBlock.getHash();
