@@ -12,7 +12,8 @@ public class Block extends Announcement implements Serializable {
     private ArrayList<Transaction> transactions;
     private Block previousBlock;
 
-    Block(Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+    Block(User user,Block previousBlock, int nonce, ArrayList<Transaction> transactions) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
+        super(user);
         this.previousBlock = previousBlock;
         this.transactions = transactions;
         verifyHash(nonce);
@@ -66,7 +67,7 @@ public class Block extends Announcement implements Serializable {
                 ", prevHash='" + getPrevHash() + '\'' +
                 ", transactions=" + getTransactions() +
                 '}';
-        
+
     }
 
 }
