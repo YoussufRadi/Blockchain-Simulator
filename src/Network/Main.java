@@ -40,8 +40,24 @@ public class Main {
 		safa.createTransaction(12, safaPeers.get(0));
 		safa.createTransaction(15, safaPeers.get(0));
 		safa.createTransaction(1, safaPeers.get(0));
+		yara.createTransaction(50, yaraPeers.get(0));
+		yara.createTransaction(12, yaraPeers.get(0));
+		yara.createTransaction(33, yaraPeers.get(0));
+		yara.createTransaction(45, yaraPeers.get(0));
 		yara.createTransaction(44, yaraPeers.get(0));
-		
+		youssef.createTransaction(41, yaraPeers.get(0));
+		youssef.createTransaction(412, yaraPeers.get(0));
+		youssef.createTransaction(412, yaraPeers.get(0));
+		youssef.createTransaction(1412, yaraPeers.get(0));
+		youssef.createTransaction(4412, yaraPeers.get(0));
+		youssef.createTransaction(5412, yaraPeers.get(0));
+		narihan.createTransaction(0, yaraPeers.get(0));
+		narihan.createTransaction(-1, yaraPeers.get(0));
+		narihan.createTransaction(0, yaraPeers.get(0));
+		narihan.createTransaction(3, yaraPeers.get(0));
+		narihan.createTransaction(2, yaraPeers.get(0));
+		narihan.createTransaction(0, yaraPeers.get(0));
+
 		System.out.println();
 		System.out.println("USER'S RECEIVED Announcements");
 		

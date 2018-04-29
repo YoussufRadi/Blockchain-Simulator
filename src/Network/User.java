@@ -62,8 +62,12 @@ public class User implements Serializable{
 			try {
 				block = new Block(blockChain.getLastBlock(), generateNonce(), transactions);
 				flag = false;
-			} catch (UnsupportedEncodingException | NoSuchAlgorithmException
-					| WrongHashException e) {
+
+			} catch (WrongHashException e){
+			    
+            }
+            catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
+			    e.printStackTrace();
 			}
 		}
 		return block;
