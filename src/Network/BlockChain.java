@@ -27,6 +27,12 @@ public class BlockChain implements Serializable {
 
         System.out.println("TOTAL SIZE : " + blocks.size());
         System.out.println("BLOCK " + b.getPrevHash() + " SIZE :  " + current);
+        System.out.println("Size is " + size);
+        System.out.println("Hoppa all blockchain blocks : ");
+        for (int i = 0; i < blocks.size(); i++) {
+        	if(blocks.get(i)!=null)
+        		System.out.println(blocks.get(i).getTransactions());
+		}
     }
 
     private void updatePointers(){
