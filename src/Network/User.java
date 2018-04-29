@@ -87,7 +87,7 @@ public class User implements Serializable{
 			if(blockChain.checkBlockInBlockChain((Block) message))
 				return;
 			else{
-                System.out.println(this.name + "Recieved a block from ");
+//                System.out.println(this.name + "Recieved a block from ");
                 blockChain.addBlockToChain((Block) message);
                 transactionCache.removeAll(((Block) message).getTransactions());
             }
@@ -98,7 +98,7 @@ public class User implements Serializable{
 				transactionCache.add((Transaction) message);
 				mineBlock();
 			}
-//		System.out.println(this.name + " received announcement");
+		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
 		ArrayList<Integer> receiversIndex = new ArrayList<>();
