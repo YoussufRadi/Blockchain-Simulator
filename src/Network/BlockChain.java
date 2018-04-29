@@ -56,7 +56,7 @@ public class BlockChain implements Serializable {
                 size.set(i, 1);
             } else {
                 b.setPreviousBlock(blocks.get(index));
-                size.add(index+1);
+                size.set(i, size.get(index)+1);
             }
 
             if(size.get(i) > current){
