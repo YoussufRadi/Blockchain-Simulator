@@ -21,7 +21,7 @@ public class BlockChain implements Serializable {
 
     public void addBlockToChain(Block b){
 
-        System.out.println("BLOOOCOOOCKKCKCKC    " + b);
+        System.out.println("BLOOOCKK    " + b);
 
 //        if(head.equals(b.getPreviousBlock())){
 //            b.setPreviousBlock(head);

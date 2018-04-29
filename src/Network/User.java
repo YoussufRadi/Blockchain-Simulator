@@ -81,8 +81,10 @@ public class User implements Serializable{
 		if(message instanceof Block)
 			if(blockChain.checkBlockInBlockChain((Block) message))
 				return;
-			else
-				blockChain.addBlockToChain((Block) message);
+			else{
+                blockChain.addBlockToChain((Block) message);
+                transactionCache.removeAll(((Block) message).getTransactions());
+            }
 		else
 			if(transactionCache.contains((Transaction) message) || blockChain.checkTransactionInChain((Transaction) message))
 				return;
