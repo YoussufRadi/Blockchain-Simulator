@@ -21,11 +21,12 @@ public class BlockChain implements Serializable {
 
     public void addBlockToChain(Block b){
 
-        System.out.println("BLOOOCKK    " + b);
-
         blocks.add(b);
         size.add(1);
         updatePointers();
+
+        System.out.println("TOTAL SIZE : " + blocks.size());
+        System.out.println("BLOCK " + b.getPrevHash() + " SIZE :  " + current);
     }
 
     private void updatePointers(){

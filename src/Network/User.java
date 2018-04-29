@@ -8,7 +8,8 @@ import java.util.Random;
 
 public class User implements Serializable{
 
-	private ArrayList<User> listOfpeers;
+    private ArrayList<User> listOfpeers;
+    private ArrayList<PublicKey> peersKey;
     private ArrayList<Transaction> transactionCache;
     private PublicKey publicKey;
 	private PrivateKey privateKey;
@@ -28,10 +29,10 @@ public class User implements Serializable{
 		this.listOfpeers = new ArrayList<User>();
 		this.transactionCache = new ArrayList<Transaction>();
 		this.blockChain = new BlockChain();
-		
+		this.peersKey = new ArrayList<>();
 	}
 
-	private void mineBlock() throws InvalidKeyException, Exception{
+	private void mineBlock() throws Exception{
 		if(transactionCache.size()>=5){
 			ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 			for (int i = 0; i < 5; i++){
@@ -73,8 +74,9 @@ public class User implements Serializable{
 		return block;
 	}
 
-	public void addPeer(User user){
+	public void addPeer(User user, PublicKey pk){
 		listOfpeers.add(user);
+		peersKey.add(pk);
 	}
 	
 	private void announce(Announcement message) throws Exception{
@@ -82,6 +84,7 @@ public class User implements Serializable{
 			if(blockChain.checkBlockInBlockChain((Block) message))
 				return;
 			else{
+                System.out.println(this.name + "Recieved a block from ");
                 blockChain.addBlockToChain((Block) message);
                 transactionCache.removeAll(((Block) message).getTransactions());
             }
@@ -92,10 +95,10 @@ public class User implements Serializable{
 				transactionCache.add((Transaction) message);
 				mineBlock();
 			}
-		System.out.println(this.name + " received announcement");
+//		System.out.println(this.name + " received announcement");
 		Random rand = new Random();
 		int numberOfRecievers = rand.nextInt(listOfpeers.size())+1;
-		ArrayList<Integer> receiversIndex = new ArrayList<Integer>();
+		ArrayList<Integer> receiversIndex = new ArrayList<>();
 		for(int i = 0; i<numberOfRecievers; i++){
 			int indexOfReceiver = rand.nextInt(listOfpeers.size());
 			if(receiversIndex.contains(indexOfReceiver)){

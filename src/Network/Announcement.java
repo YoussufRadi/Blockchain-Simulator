@@ -6,7 +6,7 @@ import java.util.Arrays;
  * This class represents the announcements which is composed of a transaction and a signature.
  */
 public class Announcement {
-	
+
 	private byte[] signature;
 
 	public void setSignature(byte[] signature) {

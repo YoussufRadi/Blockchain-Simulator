@@ -34,8 +34,8 @@ public class Network {
 			else{
 				peersIndex.add(indexOfPeer);
 				User peer = listOfUsers.get(indexOfPeer);
-				u.addPeer(peer);
-				peer.addPeer(u);	
+				u.addPeer(peer, u.getPublicKey());
+				peer.addPeer(u, peer.getPublicKey());
 			}
 		}
 		listOfUsers.add(u);

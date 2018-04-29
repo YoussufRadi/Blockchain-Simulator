@@ -22,7 +22,7 @@ public class Block extends Announcement implements Serializable {
         return hash;
     }
 
-    private String getPrevHash() {
+    protected String getPrevHash() {
         if(previousBlock == null)
             return "0000000000000000000000000000000000000000";
         return previousBlock.getHash();
@@ -66,6 +66,7 @@ public class Block extends Announcement implements Serializable {
                 ", prevHash='" + getPrevHash() + '\'' +
                 ", transactions=" + getTransactions() +
                 '}';
+        
     }
 
 }
