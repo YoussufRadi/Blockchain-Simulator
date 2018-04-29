@@ -1,8 +1,6 @@
 package Network;
 
 import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 
 public class Main {
@@ -36,6 +34,11 @@ public class Main {
 		System.out.println("ANNOUNCEMENTS");
 		System.out.println();
 
+		safa.createTransaction(1, safaPeers.get(0));
+		safa.createTransaction(10, safaPeers.get(0));
+		safa.createTransaction(11, safaPeers.get(0));
+		safa.createTransaction(12, safaPeers.get(0));
+		safa.createTransaction(15, safaPeers.get(0));
 		safa.createTransaction(1, safaPeers.get(0));
 		yara.createTransaction(44, yaraPeers.get(0));
 		

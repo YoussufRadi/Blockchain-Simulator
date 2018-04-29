@@ -1,13 +1,13 @@
 package Network;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 
-public class Block extends Announcement {
+public class Block extends Announcement implements Serializable {
     private String hash;
     private ArrayList<Transaction> transactions;
     private Block previousBlock;
@@ -23,7 +23,9 @@ public class Block extends Announcement {
     }
 
     public String getPrevHash() {
-        return previousBlock.hash;
+        if(previousBlock == null)
+            return "0000000000000000000000000000000000000000";
+        return previousBlock.getHash();
     }
 
     public Block getPreviousBlock() {
@@ -49,10 +51,10 @@ public class Block extends Announcement {
     }
 
     public void verifyHash(int nonce) throws UnsupportedEncodingException, NoSuchAlgorithmException, WrongHashException {
-        String verifiedHash = calcHash(nonce, previousBlock.getPrevHash(), transactions);
+        String verifiedHash = calcHash(nonce, getPrevHash(), transactions);
         String target = "00";
-        if (verifiedHash.equals(hash) && verifiedHash.substring(0,2).equals(target))
-            this.hash = hash;
+        if (verifiedHash.substring(0,2).equals(target))
+            this.hash = verifiedHash;
         else
             throw new WrongHashException("Failed to create the block, the hash is invalid.");
     }
@@ -60,9 +62,9 @@ public class Block extends Announcement {
     @Override
     public String toString() {
         return "Block{" +
-                "hash='" + hash + '\'' +
-                ", prevHash='" + previousBlock.hash + '\'' +
-                ", transactions=" + transactions +
+                "hash='" + getHash() + '\'' +
+                ", prevHash='" + getPrevHash() + '\'' +
+                ", transactions=" + getTransactions() +
                 '}';
     }
 

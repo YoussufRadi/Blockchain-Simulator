@@ -1,8 +1,9 @@
 package Network;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BlockChain {
+public class BlockChain implements Serializable {
 
     private Block head;
     private ArrayList<Block> blocks;
@@ -13,32 +14,56 @@ public class BlockChain {
         this.head = null;
         blocks = new ArrayList<>();
         size = new ArrayList<>();
+        blocks.add(null);
+        size.add(0);
         current = 0;
     }
 
     public void addBlockToChain(Block b){
 
-        if(head.equals(b.getPreviousBlock())){
-            b.setPreviousBlock(head);
-            blocks.add(b);
-            if(size.isEmpty())
-                size.add(1);
-            else size.get(blocks.indexOf(head)+1);
-            current = size.get(size.size()-1);
-            head = b;
-            return;
-        }
+        System.out.println("BLOOOCOOOCKKCKCKC    " + b);
 
-        int index = blocks.indexOf(b.getPreviousBlock());
-        b.setPreviousBlock(blocks.get(index));
+//        if(head.equals(b.getPreviousBlock())){
+//            b.setPreviousBlock(head);
+//            blocks.add(b);
+//            if(size.isEmpty())
+//                size.add(1);
+//            else size.get(blocks.indexOf(head)+1);
+//            current = size.get(size.size()-1);
+//            head = b;
+//            return;
+//        }
+
+
         blocks.add(b);
-        size.add(index+1);
-        if(size.get(size.size()-1) > current){
-            head = b;
-            current = size.get(size.size()-1);
+        size.add(1);
+        updatePointers();
+//        if(size.get(size.size()-1) > current){
+//            head = b;
+//            current = size.get(size.size()-1);
+//        }
+
+
+    }
+
+    private void updatePointers(){
+        for(int i = 0; i < blocks.size(); i++){
+            Block b = blocks.get(i);
+            if(b == null)
+                continue;
+            int index = blocks.indexOf(b.getPreviousBlock());
+            if(index == -1){
+                size.set(i, 1);
+            } else {
+                b.setPreviousBlock(blocks.get(index));
+                size.add(index+1);
+            }
+
+            if(size.get(i) > current){
+                head = b;
+                current = size.get(i);
+            }
         }
-
-
     }
 
 
@@ -53,6 +78,8 @@ public class BlockChain {
 
     public boolean checkTransactionInChain(Transaction t){
         for(Block b : blocks){
+            if(b == null)
+                continue;
             if(b.getTransactions().contains(t))
                 return true;
         }

@@ -1,12 +1,11 @@
 package Network;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 /*
  * This class represents the announcements which is composed of a transaction and a signature.
  */
-public class Announcement implements Serializable{
+public class Announcement {
 	byte[] signature;
 
 	public void setSignature(byte[] signature) {
