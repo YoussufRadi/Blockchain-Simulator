@@ -8,12 +8,25 @@ import java.util.Arrays;
 public class Announcement {
 
 	private byte[] signature;
+	private User sender;
 
-	public void setSignature(byte[] signature) {
+    public User getSender() {
+        return sender;
+    }
+
+    public Announcement(User sender) {
+        this.sender = sender;
+    }
+
+    public void setSignature(byte[] signature) {
 		this.signature = signature;
 	}
 
-	@Override
+    public byte[] getSignature() {
+        return signature;
+    }
+
+    @Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
